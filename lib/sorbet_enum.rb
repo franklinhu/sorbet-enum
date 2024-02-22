@@ -17,11 +17,23 @@ module SorbetEnum
 
     sig { params(name: Symbol, type: T.class_of(T::Enum)).void }
     def sorbet_enum(name, type)
+      sorbet_enum_attributes << [name, type]
+
+      attr_accessor(name)
+
       enum(name, type.values.map(&:serialize).index_with(&:to_s))
 
       T.unsafe(self).define_method("#{name}_enum") do
         type.deserialize(T.unsafe(self).public_send(name))
       end
+
+      T.unsafe(self).define_method("#{name}_enum=") do |value|
+        send("#{name}=", value.serialize)
+      end
+    end
+
+    def sorbet_enum_attributes
+      @sorbet_enum_attributes ||= []
     end
   end
 
