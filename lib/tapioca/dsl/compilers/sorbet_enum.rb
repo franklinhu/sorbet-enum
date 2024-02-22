@@ -20,10 +20,10 @@ module Tapioca
       def decorate
         root.create_path(constant) do |klass|
           constant.sorbet_enum_attributes.each do |attr_name, attr_type|
-            klass.create_method("#{attr_name}_enum", return_type: attr_type.class.name)
+            klass.create_method("#{attr_name}_enum", return_type: attr_type.name)
             klass.create_method(
               "#{attr_name}_enum=",
-              parameters: [ create_param("value", type: attr_type.class.name) ],
+              parameters: [ create_param("value", type: attr_type.name) ],
               return_type: "void",
             )
           end
