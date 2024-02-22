@@ -1,6 +1,7 @@
 # typed: true
 # frozen_string_literal: true
 
+require 'active_record'
 require 'sorbet-runtime'
 
 module SorbetEnum
@@ -14,7 +15,7 @@ module SorbetEnum
 
     include ActiveRecord::Enum
 
-    sig {params(name: Symbol, type: T.class_of(T::Enum)).void}
+    sig { params(name: Symbol, type: T.class_of(T::Enum)).void }
     def sorbet_enum(name, type)
       enum(name, type.values.map(&:serialize).index_with(&:to_s))
 
@@ -26,4 +27,3 @@ module SorbetEnum
 
   mixes_in_class_methods(ClassMethods)
 end
-
